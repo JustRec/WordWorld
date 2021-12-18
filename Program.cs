@@ -52,17 +52,16 @@ namespace regex
         }
         
         static void Main(string[] args){
+            Console.Clear();
+
             string input_text;
             string pattern;
-            int word_count;
-            Console.Clear();
+            int word_count;            
+
             input_text = "Miss Polly had a poor dolly, who was sick. She called for the talled doctor Solly to come quick. He knocked on the DOOR like a actor in the healthcare sector.";
             pattern = "-olly";
 
-            bool[] score_index = new bool[pattern.Length];
-            bool[] star_index = new bool[pattern.Length];
-
-            bool IsPatternContainsScore = false;
+            
             
             input_text = input_text.ToLower();
             
@@ -71,17 +70,13 @@ namespace regex
             word_count = words.Length;
 
             string[] final_words = new string[word_count];
-
-            
-            
+            bool IsPatternContainsScore = false;
 
             for(int i = 0; i < pattern.Length; i++ ){
                 if(pattern[i] == '-'){
-                    score_index[i] = true;
                     IsPatternContainsScore = true;
                 }
                 else if(pattern[i] == '*'){
-                    star_index[i] = true;
                 }
             }
 
