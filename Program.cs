@@ -29,15 +29,6 @@ namespace regex
 
             return words;
         }
-        static int CountWords(string input_text){
-            int counter = 0;
-            for(int i = 0; i < input_text.Length; i++){
-                if(input_text[i] == ' '){
-                    counter++;
-                }
-            }
-            return counter;
-        }
         static string[] FoundScore(string[] words, string pattern, int word_count){
             string[] elligable_words = new string[word_count];
             
@@ -75,12 +66,13 @@ namespace regex
             
             input_text = input_text.ToLower();
             
+            string[] words = input_text.Split();
 
-            word_count = CountWords(input_text);
+            word_count = words.Length;
 
             string[] final_words = new string[word_count];
 
-            string[] words = input_text.Split();
+            
             
 
             for(int i = 0; i < pattern.Length; i++ ){
@@ -99,7 +91,9 @@ namespace regex
             }
             for (int i = 0; i < word_count; i++)
             {
-                System.Console.WriteLine(final_words[i]);
+                if(final_words[i] != null){
+                    System.Console.WriteLine(final_words[i]);
+                }
             }
             
         }   
