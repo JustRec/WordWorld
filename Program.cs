@@ -42,8 +42,16 @@ namespace regex
                         if(pattern[j] != '-' && pattern.ToLower()[j] != words[i].ToLower()[j]){
                             flag = false;
                         }
+
+                        for (int k = 0; k < i; k++)
+                        {
+                            if (elligable_words[k] == words[i]){
+                                flag = false;
+                            }
+                        }
                     }
                     if(flag){
+                        
                         elligable_words[i] = words[i];
                     }
                 }
@@ -60,7 +68,7 @@ namespace regex
             int word_count;            
 
             input_text = "Miss Polly had a poor dolly, who was sick. She called for the talled doctor Solly to come quick. He knocked on the DOOR like a actor in the healthcare sector.";
-            pattern = "-olly";           
+            pattern = "---";           
             
             string[] words = input_text.Split();
 
@@ -90,4 +98,6 @@ namespace regex
         }   
     }
 }
+
+//To-Do
 
