@@ -111,14 +111,15 @@ namespace regex
             string[] substring = new string[pattern.Length];
 
             starindex = StarIndexer(pattern, word_count);
-            
             int counter = 0;
+            
+            substring[counter] = pattern.Substring(0, starindex[0]);
+            counter++;
+            
             for (int i = 0; i < starindex.Length - 1; i++){
                 substring[counter] = pattern.Substring(starindex[i]+1, (starindex[i+1] - starindex[i])-1);
                 counter ++;
-            }
-            substring[counter] = pattern.Substring(0, starindex[0]);
-            counter++;
+            }            
 
             substring[counter] = pattern.Substring((starindex[starindex.Length - 1])+1);
             counter++;
@@ -131,6 +132,16 @@ namespace regex
                     if(!words[i].ToLower().Contains(substring[j].ToLower()) && substring[j] != null){
                         flag = false;
                         break;
+                    }
+                    for (int k = 0; k < substring.Length - 1; k++)
+                    {
+                        if(substring[k] != null && substring[k+1] != null){
+                            if(words[i].IndexOf(substring[k]) > words[i].IndexOf(substring[k + 1])){
+                                flag = false;
+                                break;
+                            }
+                        }
+                        
                     }
                 }
                 if(flag){
@@ -148,7 +159,7 @@ namespace regex
             int word_count;            
 
             input_text = "Miss Polly had a poor dolly, who was sick. She called for the talled doctor Solly to come quick. He knocked on the DOOR like a actor in the healthcare sector.";
-            pattern = "*";           
+            pattern = "*r";           
             
             string[] words = input_text.Split();
 
@@ -179,6 +190,7 @@ namespace regex
                     System.Console.WriteLine(words[i]);
                 }
             }
+
         }   
     }
 }
