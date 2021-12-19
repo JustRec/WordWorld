@@ -112,43 +112,83 @@ namespace regex
 
             starindex = StarIndexer(pattern, word_count);
             int counter = 0;
-            
-            substring[counter] = pattern.Substring(0, starindex[0]);
-            counter++;
-            
-            for (int i = 0; i < starindex.Length - 1; i++){
-                substring[counter] = pattern.Substring(starindex[i]+1, (starindex[i+1] - starindex[i])-1);
-                counter ++;
-            }            
 
-            substring[counter] = pattern.Substring((starindex[starindex.Length - 1])+1);
-            counter++;
-
-            for (int i = 0; i < word_count; i++)
-            {
-                bool flag = true;
-                for (int j = 0; j < counter; j++)
+            if(pattern[0] == '*' && pattern.Length != 1 && starindex.Length == 1){
+                string special_substring = pattern.Substring(1).ToLower();
+                
+                for (int i = 0; i < word_count; i++)
                 {
-                    if(!words[i].ToLower().Contains(substring[j].ToLower()) && substring[j] != null){
-                        flag = false;
+                    if(words[i].ToLower().IndexOf(special_substring) != - 1){
+                        if(words[i].IndexOf(special_substring) == words[i].Length - special_substring.Length){
+                            elligable_words[i] = words[i];
+                        }  
+                    }                     
+                }
+            }
+            else if(pattern[pattern.Length - 1] == '*' && pattern.Length != 1 && starindex.Length == 1){
+                string special_subtring = pattern.Substring(0,pattern.Length - 1).ToLower();
+
+                for (int i = 0; i < word_count; i++)
+                {
+                    if(words[i].ToLower().IndexOf(special_subtring) == 0){
+                        elligable_words[i] = words[i];
+                    }
+                }
+            }
+            
+            else if(pattern[0] == '*' && pattern.Length == 1){
+                elligable_words = words;
+            }
+
+            else{
+                substring[counter] = pattern.Substring(0, starindex[0]);
+                counter++;
+
+                for (int i = 0; i < starindex.Length - 1; i++){
+                    substring[counter] = pattern.Substring(starindex[i]+1, (starindex[i+1] - starindex[i])-1);
+                    counter ++;
+                }            
+
+                substring[counter] = pattern.Substring((starindex[starindex.Length - 1])+1);
+                counter++;
+
+                for (int i = 0; i < word_count; i++)
+                {
+                    bool flag = true;
+                    for (int j = 0; j < counter; j++)
+                    {
+                        if(!words[i].ToLower().Contains(substring[j].ToLower()) && substring[j] != null){
+                            flag = false;
+                            break;
+                        }
+                        for (int k = 0; k < substring.Length - 1; k++)
+                        {
+                            if(substring[k] != null && substring[k+1] != null){
+                                if(words[i].IndexOf(substring[k]) > words[i].IndexOf(substring[k + 1])){
+                                    flag = false;
+                                    break;
+                                }
+                            }
+
+                        }
+                    }
+                    if(flag){
+                        elligable_words[i] = words[i];
+                    }
+
+                }
+            }
+            for (int i = 0; i < elligable_words.Length; i++)
+            {
+                for (int j = 0; j < elligable_words.Length; j++)
+                {
+                    if(elligable_words[i] == elligable_words [j] && i != j){
+                        elligable_words[i] = null;
                         break;
                     }
-                    for (int k = 0; k < substring.Length - 1; k++)
-                    {
-                        if(substring[k] != null && substring[k+1] != null){
-                            if(words[i].IndexOf(substring[k]) > words[i].IndexOf(substring[k + 1])){
-                                flag = false;
-                                break;
-                            }
-                        }
-                        
-                    }
                 }
-                if(flag){
-                    elligable_words[i] = words[i];
-                }
-                
             }
+            
             return elligable_words;
         }
         static void Main(string[] args){
@@ -159,7 +199,7 @@ namespace regex
             int word_count;            
 
             input_text = "Miss Polly had a poor dolly, who was sick. She called for the talled doctor Solly to come quick. He knocked on the DOOR like a actor in the healthcare sector.";
-            pattern = "*r";           
+            pattern = "*";           
             
             string[] words = input_text.Split();
 
