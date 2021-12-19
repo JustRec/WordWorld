@@ -88,15 +88,13 @@ namespace regex
 
             int[] starindex = new int[counter];
 
-            int searchstart = 0;
-            for (int i = 0; i < counter; i++)
+            for (int i = 0; i < word_count; i++)
             {
-                for (int j = searchstart; j < starindex_temp.Length; j++)
-                {
-                    if(starindex_temp[j] != 0){
-                        starindex[i] = starindex_temp[j];
-                        searchstart = j +1;
-                    }
+                if(starindex_temp[i] != 0){
+                    starindex[i] = starindex_temp[i];
+                }
+                else{
+                    break;
                 }
             }
 
@@ -116,11 +114,11 @@ namespace regex
             
             int counter = 0;
             for (int i = 0; i < starindex.Length - 1; i++){
-                substring[counter] = pattern.Substring(starindex[i], (starindex[i+1] - starindex[i]));
+                substring[counter] = pattern.Substring(starindex[i]+1, (starindex[i+1] - starindex[i])-1);
                 counter ++;
             }
             substring[counter] = pattern.Substring(0, starindex[0]);
-            counter ++;
+            counter++;
 
             substring[counter] = pattern.Substring((starindex[starindex.Length - 1])+1);
             counter++;
@@ -150,7 +148,7 @@ namespace regex
             int word_count;            
 
             input_text = "Miss Polly had a poor dolly, who was sick. She called for the talled doctor Solly to come quick. He knocked on the DOOR like a actor in the healthcare sector.";
-            pattern = "do*";           
+            pattern = "*";           
             
             string[] words = input_text.Split();
 
@@ -186,4 +184,5 @@ namespace regex
 }
 
 //To-Do
-
+//substring confuse
+//single star
